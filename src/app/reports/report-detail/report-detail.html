@@ -4,27 +4,27 @@
 
     <div class="spacing-md">
       <strong class="text-primary">Date/Time:</strong>
-      <p class="text-secondary">{{ report.datetime | date : 'medium' }}</p>
+      <p class="text_content">{{ report.datetime | date : 'medium' }}</p>
     </div>
 
     <div class="spacing-md">
       <strong class="text-primary">Map:</strong>
-      <p class="text-secondary">{{ getMapName() }}</p>
+      <p class="text_content">{{ getMapName() }}</p>
     </div>
 
     <div class="spacing-md">
       <strong class="text-primary">Map Modifier:</strong>
-      <p class="text-secondary">{{ report.mapModifiers || 'None' }}</p>
+      <p class="text_content">{{ report.mapModifiers || 'None' }}</p>
     </div>
 
     <div class="spacing-md">
       <strong class="text-primary">Time in Raid:</strong>
-      <p class="text-secondary">{{ report.timeInRaid }} minutes</p>
+      <p class="text_content">{{ report.timeInRaid }} minutes</p>
     </div>
 
     <div class="spacing-xl">
       <strong class="text-primary">Raiders Encountered:</strong>
-      <div *ngIf="report.raidersEncounters.length === 0" class="text-secondary spacing-top-sm">
+      <div *ngIf="report.raidersEncounters.length === 0" class="text_content spacing-top-sm">
         No raiders encountered
       </div>
       <div *ngFor="let encounter of report.raidersEncounters" class="encounter-box spacing-top-md">
@@ -50,7 +50,7 @@
             style="max-width: 150px"
           />
         </div>
-        <div *ngIf="encounter.fieldNotes" class="text-secondary">
+        <div *ngIf="encounter.fieldNotes" class="text_content">
           <strong>Notes:</strong> {{ encounter.fieldNotes }}
         </div>
       </div>

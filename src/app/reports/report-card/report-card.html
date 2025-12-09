@@ -9,15 +9,15 @@
       <h6 class="card-title text-primary">
         {{ report.datetime | date : 'short' }}
       </h6>
-      <span class="text-secondary">{{ report.timeInRaid }} min</span>
+      <span class="text_content">Time in Raid: {{ report.timeInRaid }} min</span>
     </div>
-    <p class="card-text text-secondary text-small spacing-sm">
+    <p class="card-text text_content text-small spacing-sm">
       <strong>Map:</strong> {{ getMapName() }}
     </p>
-    <p class="card-text text-secondary text-small spacing-md">
+    <p class="card-text text_content text-small spacing-md">
       Modifier: {{ report.mapModifiers || 'None' }}
     </p>
-    <div class="text-secondary text-small">
+    <div class="text_content text-small">
       <span class="text-success">Friendly: {{ getFriendlyCount() }}</span>
       <span class="text-warning">Skittish: {{ getSkittishCount() }}</span>
       <span class="text-danger">Unfriendly: {{ getUnfriendlyCount() }}</span>

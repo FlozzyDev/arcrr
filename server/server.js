@@ -32,7 +32,8 @@ app.listen(PORT, () => {
 });
 
 app.get('/', (req, res) => {
-  res.send('This is the home page');
+  res.status(204);
+  send();
 });
 
 export default app;

@@ -12,9 +12,11 @@ body {
   color: #fff !important;
 }
 
-.text-secondary {
-  color: #ffffff;
+.text_content {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #f0f0f0 !important;
 }
+
 /* generic call attention */
 .text-success {
   color: #28a745;

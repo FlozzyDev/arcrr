@@ -6,30 +6,30 @@
       <!-- View Mode -->
       <div class="spacing-md">
         <strong class="text-primary">Name:</strong>
-        <p class="text-secondary">{{ raider.name }}</p>
+        <p class="text_content">{{ raider.name }}</p>
       </div>
 
       <div class="spacing-md" *ngIf="raider.embarkId">
         <strong class="text-primary">Embark ID:</strong>
-        <p class="text-secondary">{{ raider.embarkId }}</p>
+        <p class="text_content">{{ raider.embarkId }}</p>
       </div>
 
       <div class="spacing-md">
         <strong class="text-primary">First Encounter:</strong>
-        <p class="text-secondary">{{ raider.firstEncounterDate | date : 'medium' }}</p>
+        <p class="text_content">{{ raider.firstEncounterDate | date : 'medium' }}</p>
       </div>
 
       <div class="spacing-md">
         <strong class="text-primary">Total Encounters:</strong>
-        <p class="text-secondary">{{ raider.totalEncounters }}</p>
+        <p class="text_content">{{ raider.totalEncounters }}</p>
       </div>
 
       <div class="spacing-md">
         <strong class="text-primary">Disposition Breakdown:</strong>
-        <div class="text-secondary">
-          <div>Friendly: {{ raider.friendlyEncounters }}</div>
-          <div>Skittish: {{ raider.skittishEncounters }}</div>
-          <div>Unfriendly: {{ raider.hostileEncounters }}</div>
+        <div class="text_content">
+          <div class="text-success">Friendly: {{ raider.friendlyEncounters }}</div>
+          <div class="text-warning">Skittish: {{ raider.skittishEncounters }}</div>
+          <div class="text-danger">Unfriendly: {{ raider.hostileEncounters }}</div>
         </div>
       </div>
 
@@ -47,13 +47,13 @@
 
       <div class="spacing-xl">
         <strong class="text-primary">Encounter History:</strong>
-        <div *ngIf="raider.notes.length === 0" class="text-secondary spacing-top-sm">
+        <div *ngIf="raider.notes.length === 0" class="text_content spacing-top-sm">
           No encounter notes
         </div>
         <div *ngFor="let note of raider.notes" class="encounter-box spacing-top-md">
           <div class="spacing-sm">
             <strong class="text-primary">Date: </strong>
-            <span class="text-secondary">{{ getReportDate(note) }}</span>
+            <span class="text_content">{{ getReportDate(note) }}</span>
           </div>
           <div class="spacing-sm">
             <strong class="text-primary">Disposition: </strong>
@@ -67,7 +67,7 @@
           </div>
           <div *ngIf="note.fieldNotes" class="spacing-sm">
             <strong class="text-primary">Notes: </strong>
-            <span class="text-secondary">{{ note.fieldNotes }}</span>
+            <span class="text_content">{{ note.fieldNotes }}</span>
           </div>
         </div>
       </div>
@@ -121,10 +121,10 @@
           <div *ngFor="let note of editedNotes; let i = index" class="encounter-box spacing-md">
             <div class="spacing-sm">
               <strong class="text-primary">Date: </strong>
-              <span class="text-secondary">{{ getReportDate(note) }}</span>
+              <span class="text_content">{{ getReportDate(note) }}</span>
             </div>
             <div class="spacing-sm">
-              <label [for]="'fieldNotes' + i" class="form-label text-secondary">Field Notes</label>
+              <label [for]="'fieldNotes' + i" class="form-label text_content">Field Notes</label>
               <textarea
                 class="form-control"
                 [id]="'fieldNotes' + i"

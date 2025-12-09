@@ -5,7 +5,6 @@
     </h5>
 
     <form (ngSubmit)="onSubmit()">
-      <!-- Map Selection -->
       <div class="spacing-md">
         <label for="map" class="form-label text-primary">Map</label>
         <select
@@ -23,7 +22,6 @@
         </select>
       </div>
 
-      <!-- Map Modifier -->
       <div class="spacing-md">
         <label for="mapModifiers" class="form-label text-primary">Map Modifier</label>
         <select
@@ -39,7 +37,6 @@
         </select>
       </div>
 
-      <!-- Time in Raid -->
       <div class="spacing-md">
         <label for="timeInRaid" class="form-label text-primary">Time in Raid (minutes)</label>
         <input
@@ -54,7 +51,6 @@
         />
       </div>
 
-      <!-- Raiders Encounters -->
       <div class="spacing-md">
         <label class="form-label text-primary">Raiders Encountered</label>
         <div *ngFor="let raider of raiders; let i = index" class="card encounter-box spacing-md">
@@ -72,7 +68,7 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'name' + i" class="form-label text-secondary">Name *</label>
+              <label [for]="'name' + i" class="form-label text_content">Name *</label>
               <input
                 type="text"
                 class="form-control"
@@ -84,7 +80,7 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'embarkId' + i" class="form-label text-secondary"
+              <label [for]="'embarkId' + i" class="form-label text_content"
                 >Embark ID (optional)</label
               >
               <input
@@ -97,7 +93,7 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'disposition' + i" class="form-label text-secondary">Disposition</label>
+              <label [for]="'disposition' + i" class="form-label text_content">Disposition</label>
               <select
                 class="form-select"
                 [id]="'disposition' + i"
@@ -111,7 +107,7 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'picturePath' + i" class="form-label text-secondary"
+              <label [for]="'picturePath' + i" class="form-label text_content"
                 >Picture Path (optional)</label
               >
               <input
@@ -125,7 +121,7 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'fieldNotes' + i" class="form-label text-secondary"
+              <label [for]="'fieldNotes' + i" class="form-label text_content"
                 >Field Notes (optional)</label
               >
               <textarea
