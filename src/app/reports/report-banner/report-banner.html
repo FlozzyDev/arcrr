@@ -1,0 +1,23 @@
+<div class="report-banner" [style.background-image]="'url(' + getBannerImage() + ')'">
+  <div class="banner-overlay">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <label for="mapFilter" class="form-label text-primary spacing-sm">Filter by Map</label>
+          <select
+            id="mapFilter"
+            class="form-select"
+            [(ngModel)]="selectedValue"
+            (ngModelChange)="onMapChange()"
+            name="mapFilter"
+          >
+            <option value="all">All Maps</option>
+            <option *ngFor="let map of maps" [value]="map._id">
+              {{ map.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+.raider-card {
+  cursor: pointer;
+}
+
+.raider-card .text-success,
+.raider-card .text-warning,
+.raider-card .text-danger {
+  margin-right: 0.5rem;
+}

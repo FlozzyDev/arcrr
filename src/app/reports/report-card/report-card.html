@@ -1,0 +1,26 @@
+<div
+  class="card report-card"
+  [class.card-dark-selected]="isSelected"
+  [class.card-dark]="!isSelected"
+>
+  <div class="report-card-banner" [style.background-image]="'url(' + getBannerImage() + ')'"></div>
+  <div class="card-body">
+    <div class="flex-between spacing-sm">
+      <h6 class="card-title text-primary">
+        {{ report.datetime | date : 'short' }}
+      </h6>
+      <span class="text-secondary">{{ report.timeInRaid }} min</span>
+    </div>
+    <p class="card-text text-secondary text-small spacing-sm">
+      <strong>Map:</strong> {{ getMapName() }}
+    </p>
+    <p class="card-text text-secondary text-small spacing-md">
+      Modifier: {{ report.mapModifiers || 'None' }}
+    </p>
+    <div class="text-secondary text-small">
+      <span class="text-success">Friendly: {{ getFriendlyCount() }}</span>
+      <span class="text-warning">Skittish: {{ getSkittishCount() }}</span>
+      <span class="text-danger">Unfriendly: {{ getUnfriendlyCount() }}</span>
+    </div>
+  </div>
+</div>

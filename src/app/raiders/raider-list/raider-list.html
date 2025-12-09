@@ -1,0 +1,12 @@
+<div class="raider-list">
+  <div *ngIf="raiders.length === 0" class="text-center text-white-50 p-4">
+    <p>No raiders found</p>
+  </div>
+  <div *ngFor="let raider of raiders" class="mb-3">
+    <app-raider-card
+      [raider]="raider"
+      [isSelected]="selectedRaider?._id === raider._id"
+      (click)="onRaiderClick(raider)"
+    ></app-raider-card>
+  </div>
+</div>

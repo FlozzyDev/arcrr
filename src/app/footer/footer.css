@@ -1,0 +1,22 @@
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.footer-content {
+  text-align: center;
+}
+
+.copyright {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.disclaimer {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-style: italic;
+}

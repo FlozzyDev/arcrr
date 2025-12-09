@@ -1,0 +1,146 @@
+<div class="card card-dark">
+  <div class="card-body">
+    <h5 class="card-title text-primary spacing-xl">Raider Details</h5>
+
+    <div *ngIf="!isEditing">
+      <!-- View Mode -->
+      <div class="spacing-md">
+        <strong class="text-primary">Name:</strong>
+        <p class="text-secondary">{{ raider.name }}</p>
+      </div>
+
+      <div class="spacing-md" *ngIf="raider.embarkId">
+        <strong class="text-primary">Embark ID:</strong>
+        <p class="text-secondary">{{ raider.embarkId }}</p>
+      </div>
+
+      <div class="spacing-md">
+        <strong class="text-primary">First Encounter:</strong>
+        <p class="text-secondary">{{ raider.firstEncounterDate | date : 'medium' }}</p>
+      </div>
+
+      <div class="spacing-md">
+        <strong class="text-primary">Total Encounters:</strong>
+        <p class="text-secondary">{{ raider.totalEncounters }}</p>
+      </div>
+
+      <div class="spacing-md">
+        <strong class="text-primary">Disposition Breakdown:</strong>
+        <div class="text-secondary">
+          <div>Friendly: {{ raider.friendlyEncounters }}</div>
+          <div>Skittish: {{ raider.skittishEncounters }}</div>
+          <div>Unfriendly: {{ raider.hostileEncounters }}</div>
+        </div>
+      </div>
+
+      <div class="spacing-md" *ngIf="raider.picturePath">
+        <strong class="text-primary">Picture:</strong>
+        <div class="spacing-top-sm">
+          <img
+            [src]="raider.picturePath"
+            alt="Raider"
+            class="img-thumbnail"
+            style="max-width: 200px"
+          />
+        </div>
+      </div>
+
+      <div class="spacing-xl">
+        <strong class="text-primary">Encounter History:</strong>
+        <div *ngIf="raider.notes.length === 0" class="text-secondary spacing-top-sm">
+          No encounter notes
+        </div>
+        <div *ngFor="let note of raider.notes" class="encounter-box spacing-top-md">
+          <div class="spacing-sm">
+            <strong class="text-primary">Date: </strong>
+            <span class="text-secondary">{{ getReportDate(note) }}</span>
+          </div>
+          <div class="spacing-sm">
+            <strong class="text-primary">Disposition: </strong>
+            <span
+              [class.text-success]="note.disposition === 'friendly'"
+              [class.text-warning]="note.disposition === 'skittish'"
+              [class.text-danger]="note.disposition === 'unfriendly'"
+            >
+              {{ getDispositionText(note.disposition) }}
+            </span>
+          </div>
+          <div *ngIf="note.fieldNotes" class="spacing-sm">
+            <strong class="text-primary">Notes: </strong>
+            <span class="text-secondary">{{ note.fieldNotes }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-gap">
+        <button class="btn btn-primary" (click)="onEdit()">Edit</button>
+        <button class="btn btn-danger" (click)="onDelete()">Delete</button>
+      </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div *ngIf="isEditing">
+      <form (ngSubmit)="onSave()">
+        <div class="spacing-md">
+          <label for="name" class="form-label text-primary">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            [(ngModel)]="editedName"
+            name="name"
+            required
+          />
+        </div>
+
+        <div class="spacing-md">
+          <label for="embarkId" class="form-label text-primary">Embark ID (optional)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="embarkId"
+            [(ngModel)]="editedEmbarkId"
+            name="embarkId"
+          />
+        </div>
+
+        <div class="spacing-md">
+          <label for="picturePath" class="form-label text-primary">Picture Path</label>
+          <input
+            type="text"
+            class="form-control"
+            id="picturePath"
+            [(ngModel)]="editedPicturePath"
+            name="picturePath"
+            placeholder="/assets/images/raiders/..."
+          />
+        </div>
+
+        <div class="spacing-xl">
+          <label class="form-label text-primary">Encounter Notes</label>
+          <div *ngFor="let note of editedNotes; let i = index" class="encounter-box spacing-md">
+            <div class="spacing-sm">
+              <strong class="text-primary">Date: </strong>
+              <span class="text-secondary">{{ getReportDate(note) }}</span>
+            </div>
+            <div class="spacing-sm">
+              <label [for]="'fieldNotes' + i" class="form-label text-secondary">Field Notes</label>
+              <textarea
+                class="form-control"
+                [id]="'fieldNotes' + i"
+                [(ngModel)]="note.fieldNotes"
+                [name]="'fieldNotes' + i"
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-gap">
+          <button type="submit" class="btn btn-success">Save</button>
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

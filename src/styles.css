@@ -1,0 +1,156 @@
+html,
+body {
+  background-color: #1a1a1a;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* General text colors - going to start simple */
+.text-primary {
+  color: #fff !important;
+}
+
+.text-secondary {
+  color: #ffffff;
+}
+/* generic call attention */
+.text-success {
+  color: #28a745;
+}
+
+.text-warning {
+  color: #ffc107;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+/* Background Colors */
+.bg-primary {
+  background-color: #2a2a2a;
+}
+
+.bg-secondary {
+  background-color: #3a3a3a;
+}
+
+.bg-secondary-light {
+  background-color: rgba(58, 58, 58, 0.25);
+}
+
+/* Spacing */
+.spacing-sm {
+  margin-bottom: 0.5rem;
+}
+
+.spacing-md {
+  margin-bottom: 1rem;
+}
+
+.spacing-lg {
+  margin-bottom: 1.5rem;
+}
+
+.spacing-xl {
+  margin-bottom: 2rem;
+}
+
+.spacing-top-sm {
+  margin-top: 0.5rem;
+}
+
+.spacing-top-md {
+  margin-top: 1rem;
+}
+
+.spacing-top-lg {
+  margin-top: 1.5rem;
+}
+
+.padding-sm {
+  padding: 0.5rem;
+}
+
+.padding-md {
+  padding: 1rem;
+}
+
+.padding-lg {
+  padding: 1.5rem;
+}
+
+.padding-xl {
+  padding: 2rem;
+}
+
+/* general layout styles - need to look at adding Bootstrap  */
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex-gap {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Card Styles */
+.card-dark {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+}
+
+.card-dark-selected {
+  background-color: #2a2a2a;
+  border: 1px solid #0d6efd;
+}
+
+.encounter-box {
+  background-color: rgba(58, 58, 58, 0.25);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.card-dark {
+  border-radius: 4px;
+}
+
+/* Typography */
+.text-small {
+  font-size: 0.8rem;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+/* Form Controls */
+.form-control {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.form-control:focus {
+  background-color: #2a2a2a;
+  border-color: #0d6efd;
+  color: #fff;
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #aaa;
+}

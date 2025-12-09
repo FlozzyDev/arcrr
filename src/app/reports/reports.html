@@ -1,0 +1,50 @@
+<div class="reports-container">
+  <!-- Map Filter Banner Section -->
+  <app-report-banner
+    [maps]="maps"
+    [selectedMapId]="selectedMapId"
+    [selectedMap]="selectedMap"
+    (mapSelected)="onMapSelected($event)"
+  ></app-report-banner>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Left Column: Report List -->
+      <div class="col-md-6">
+        <div class="flex-between spacing-md">
+          <h2 class="text-primary">Reports</h2>
+          <button class="btn btn-success" (click)="onCreateReport()">Create Field Report</button>
+        </div>
+        <app-report-list
+          [reports]="reports"
+          [selectedReport]="selectedReport"
+          (reportSelected)="onReportSelected($event)"
+        ></app-report-list>
+      </div>
+
+      <!-- Right Column: Detail/Form -->
+      <div class="col-md-6">
+        <div *ngIf="showForm">
+          <app-report-form
+            [report]="isEditing ? selectedReport : null"
+            [maps]="maps"
+            [selectedMapId]="selectedMapId"
+            (submit)="onFormSubmit($event)"
+            (cancel)="onFormCancel()"
+          ></app-report-form>
+        </div>
+        <div *ngIf="!showForm && selectedReport">
+          <app-report-detail
+            [report]="selectedReport"
+            (edit)="onEditReport()"
+            (delete)="onDeleteReport($event)"
+          ></app-report-detail>
+        </div>
+        <div *ngIf="!showForm && !selectedReport" class="text-center text-secondary padding-xl">
+          <p>Select a report to view details</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

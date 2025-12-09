@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/']"
+      ><img
+        src="/assets/images/site/arcrr_logo.png"
+        alt="Arc Raiders Reports Logo"
+        class="navbar-brand-logo me-2"
+        width="30"
+        height="30"
+      />Arc Raiders Reports</a
+    >
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/raiders']" routerLinkActive="active">Raiders</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/reports']" routerLinkActive="active">Reports</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

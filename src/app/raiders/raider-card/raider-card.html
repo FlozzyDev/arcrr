@@ -1,0 +1,20 @@
+<div
+  class="card raider-card"
+  [class.card-dark-selected]="isSelected"
+  [class.card-dark]="!isSelected"
+>
+  <div class="card-body">
+    <div class="flex-between spacing-sm">
+      <h6 class="card-title text-primary">{{ raider.name }}</h6>
+      <span class="text-secondary">{{ raider.totalEncounters }} encounters</span>
+    </div>
+    <div *ngIf="raider.embarkId" class="spacing-sm">
+      <p class="card-text text-secondary text-small">Embark ID: {{ raider.embarkId }}</p>
+    </div>
+    <div class="text-secondary text-small">
+      <span class="text-success">Friendly: {{ raider.friendlyEncounters }}</span>
+      <span class="text-warning">Skittish: {{ raider.skittishEncounters }}</span>
+      <span class="text-danger">Unfriendly: {{ raider.hostileEncounters }}</span>
+    </div>
+  </div>
+</div>

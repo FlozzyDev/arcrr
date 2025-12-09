@@ -1,0 +1,41 @@
+<div class="raiders-container">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Left Column: Raider List -->
+      <div class="col-md-6">
+        <h2 class="text-primary spacing-md">Raiders</h2>
+        <div class="spacing-md">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search raiders by name..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+          />
+        </div>
+        <app-raider-list
+          [raiders]="filteredRaiders"
+          [selectedRaider]="selectedRaider"
+          (raiderSelected)="onRaiderSelected($event)"
+        ></app-raider-list>
+      </div>
+
+      <!-- Right Column: Raider Detail -->
+      <div class="col-md-6">
+        <div *ngIf="selectedRaider">
+          <app-raider-detail
+            [raider]="selectedRaider"
+            [isEditing]="isEditing"
+            (edit)="onEditRaider()"
+            (update)="onUpdateRaider($event)"
+            (delete)="onDeleteRaider($event)"
+            (cancel)="onCancelEdit()"
+          ></app-raider-detail>
+        </div>
+        <div *ngIf="!selectedRaider" class="text-center text-secondary padding-xl">
+          <p>Select a raider to view details</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

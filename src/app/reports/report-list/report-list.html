@@ -1,0 +1,12 @@
+<div class="report-list">
+  <div *ngIf="reports.length === 0" class="text-center text-white-50 p-4">
+    <p>No reports found</p>
+  </div>
+  <div *ngFor="let report of reports" class="mb-3">
+    <app-report-card
+      [report]="report"
+      [isSelected]="selectedReport?._id === report._id"
+      (click)="onReportClick(report)"
+    ></app-report-card>
+  </div>
+</div>
