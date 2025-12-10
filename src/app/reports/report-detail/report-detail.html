@@ -6,6 +6,10 @@
       <strong class="text-primary">Date/Time:</strong>
       <p class="text_content">{{ report.datetime | date : 'medium' }}</p>
     </div>
+    <div class="spacing-md">
+      <strong class="text-primary">Report Number:</strong>
+      <p class="text_content">{{ report.reportNumber }}</p>
+    </div>
 
     <div class="spacing-md">
       <strong class="text-primary">Map:</strong>
@@ -19,7 +23,7 @@
 
     <div class="spacing-md">
       <strong class="text-primary">Time in Raid:</strong>
-      <p class="text_content">{{ report.timeInRaid }} minutes</p>
+      <p class="text_content">{{ formatTime(report.timeInRaid) }}</p>
     </div>
 
     <div class="spacing-xl">

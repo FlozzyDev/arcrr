@@ -9,7 +9,8 @@ export class RaiderModel {
   constructor(
     public _id: string,
     public name: string,
-    public embarkId?: string,
+    public embarkId: string,
+    public steamProfileId?: string,
     public firstEncounterDate: Date = new Date(),
     public totalEncounters: number = 0,
     public friendlyEncounters: number = 0,

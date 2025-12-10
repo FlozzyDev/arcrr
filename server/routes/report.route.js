@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   try {
     const reports = await Report.find()
       .populate('mapId', 'name bannerImage')
-      .populate('raidersEncounters.raiderId', 'name');
+      .populate('raidersEncounters.raiderId', 'name embarkId');
     res.status(200).json({ message: 'Reports fetched successfully', reports });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching reports', error });
@@ -24,7 +24,7 @@ router.get('/map/:mapId', async (req, res) => {
     const { mapId } = req.params;
     const reports = await Report.find({ mapId: mapId })
       .populate('mapId', 'name bannerImage')
-      .populate('raidersEncounters.raiderId', 'name');
+      .populate('raidersEncounters.raiderId', 'name embarkId');
     res.status(200).json({ message: 'Reports fetched successfully', reports });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching reports by map', error });
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
   try {
     const report = await Report.findById(req.params.id)
       .populate('mapId', 'name bannerImage')
-      .populate('raidersEncounters.raiderId', 'name');
+      .populate('raidersEncounters.raiderId', 'name embarkId');
     res.status(200).json({ message: 'Report fetched successfully', report });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching report', error });
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { mapId, mapModifiers, timeInRaid, raidersEncounters } = req.body;
-    const map = await Map.findById(mapId); // find the map by id
+    const map = await Map.findById(mapId);
     if (!map) {
       return res.status(404).json({ message: 'Map not found' });
     }
@@ -57,29 +57,36 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Invalid map modifier for this map' });
     }
 
-    // The only modifier that allows time>30 is secretBunker so we can check here since I am too lazy to add a validation step
-    const maxTime = mapModifiers === 'secretBunker' ? 45 : 30;
-    if (timeInRaid > maxTime) {
+    const maxTimeSeconds = mapModifiers === 'Secret Bunker' ? 2700 : 1800;
+    if (timeInRaid > maxTimeSeconds) {
       return res.status(400).json({
-        message: `Time in raid cannot exceed ${maxTime} minutes for this modifier`,
+        message: `Time in raid cannot exceed ${maxTimeSeconds / 60} minutes for this modifier`,
       });
     }
 
-    //-------------------------------------------------------------- RAIDER PORTION -------- We need to see if they exist and then append, else make a new one.
+    const lastReport = await Report.findOne().sort({ reportNumber: -1 });
+    const newReportNumber = lastReport ? lastReport.reportNumber + 1 : 1;
+
     const processedEncounters = [];
 
     for (const encounter of raidersEncounters) {
       let raider = await Raider.findOne({
-        name: { $regex: new RegExp(`^${encounter.name}$`, 'i') }, // regex to check name case-insensitively
+        name: { $regex: new RegExp(`^${encounter.name}$`, 'i') },
       });
 
       if (!raider) {
-        // IF RAIDER DOES NOT EXIST (NOT REPORTED PREVIOUSLY), CREATE NEW
+        if (!encounter.embarkId) {
+          return res.status(400).json({
+            message: `Embark ID is required for new raider: ${encounter.name}`,
+          });
+        }
+
         raider = new Raider({
           name: encounter.name,
-          embarkId: encounter.embarkId || '',
-          firstEncounterDate: new Date(), // set the first encounter date to the current date
-          totalEncounters: 1, // set the total encounters to 1
+          embarkId: encounter.embarkId,
+          steamProfileId: encounter.steamProfileId || '',
+          firstEncounterDate: new Date(),
+          totalEncounters: 1,
           friendlyEncounters: encounter.disposition === 'friendly' ? 1 : 0,
           skittishEncounters: encounter.disposition === 'skittish' ? 1 : 0,
           hostileEncounters: encounter.disposition === 'unfriendly' ? 1 : 0,
@@ -103,7 +110,6 @@ router.post('/', async (req, res) => {
           });
         }
       } else {
-        // -------------------------------------------------------------- IF RAIDER EXISTS (REPORTED PREVIOUSLY), append to existing
         raider.totalEncounters += 1;
         if (encounter.disposition === 'friendly') raider.friendlyEncounters += 1;
         if (encounter.disposition === 'skittish') raider.skittishEncounters += 1;
@@ -113,12 +119,14 @@ router.post('/', async (req, res) => {
           raider.embarkId = encounter.embarkId;
         }
 
-        // -------------------------------------------------------------- UPDATE PICTURE - Update picture if provided -- keep the most recent skin they use
+        if (encounter.steamProfileId && !raider.steamProfileId) {
+          raider.steamProfileId = encounter.steamProfileId;
+        }
+
         if (encounter.picturePath) {
           raider.picturePath = encounter.picturePath;
         }
 
-        // -------------------------------------------------------------- ADD NOTE - Add new note entry to the notes array
         raider.notes.push({
           fieldNotes: encounter.fieldNotes || '',
           disposition: encounter.disposition,
@@ -136,9 +144,6 @@ router.post('/', async (req, res) => {
         }
       }
 
-      /* RETURN RAIDER ID, DISPOSITION, FIELD NOTES, PICTURE PATH
-      We need this to then pass to the report creation so we can populate the report with the raider details
-      */
       processedEncounters.push({
         raiderId: raider._id,
         disposition: encounter.disposition,
@@ -147,8 +152,8 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // ------------------------------------------------------- ------ CREATE NEW REPORT - Now we can create the new report once the raider is created or updated
     const newReport = new Report({
+      reportNumber: newReportNumber,
       mapId,
       mapModifiers,
       timeInRaid,

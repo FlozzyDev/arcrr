@@ -15,6 +15,7 @@ import { MapModel } from '../../maps/map.model';
 interface RaiderEncounterForm {
   name: string;
   embarkId?: string;
+  steamProfileId?: string;
   disposition: 'friendly' | 'skittish' | 'unfriendly';
   fieldNotes?: string;
   picturePath?: string;
@@ -35,7 +36,8 @@ export class ReportForm implements OnInit, OnChanges {
 
   selectedMapIdForm: string = '';
   mapModifiers: string = '';
-  timeInRaid: number = 0;
+  timeMinutes: number = 0;
+  timeSeconds: number = 0;
   raiders: RaiderEncounterForm[] = [];
   availableModifiers: string[] = [];
 
@@ -55,20 +57,20 @@ export class ReportForm implements OnInit, OnChanges {
 
   private initializeForm(): void {
     if (this.report) {
-      // Edit mode
       this.selectedMapIdForm =
         typeof this.report.mapId === 'string' ? this.report.mapId : this.report.mapId._id;
       this.mapModifiers = this.report.mapModifiers;
-      this.timeInRaid = this.report.timeInRaid;
+      this.timeMinutes = Math.floor(this.report.timeInRaid / 60);
+      this.timeSeconds = this.report.timeInRaid % 60;
 
       this.raiders = this.report.raidersEncounters.map((enc) => ({
         name: typeof enc.raiderId === 'object' ? enc.raiderId.name : enc.raiderId || '',
+        embarkId: typeof enc.raiderId === 'object' ? enc.raiderId.embarkId || '' : '',
         disposition: enc.disposition,
         fieldNotes: enc.fieldNotes || '',
         picturePath: enc.picturePath || '',
       }));
     } else {
-      // Create mode
       this.selectedMapIdForm = this.selectedMapId !== 'all' ? this.selectedMapId : '';
       this.raiders = [{ name: '', disposition: 'friendly' }];
     }
@@ -102,24 +104,49 @@ export class ReportForm implements OnInit, OnChanges {
       return;
     }
 
-    if (!this.timeInRaid || this.timeInRaid <= 0) {
-      alert('Please enter a valid time in raid');
+    if (this.timeMinutes < 0 || this.timeSeconds < 0 || this.timeSeconds > 59) {
+      alert('Please enter a valid time (seconds must be 0-59)');
       return;
+    }
+
+    const totalSeconds = this.timeMinutes * 60 + this.timeSeconds;
+    if (totalSeconds <= 0) {
+      alert('Time in raid must be greater than 0');
+      return;
+    }
+
+    const maxTime = this.mapModifiers === 'Secret Bunker' ? 2700 : 1800;
+    if (totalSeconds > maxTime) {
+      alert(`Time in raid cannot exceed ${Math.floor(maxTime / 60)} minutes for this modifier`);
+      return;
+    }
+
+    const validRaiders = this.raiders.filter((r) => r.name.trim() !== '');
+
+    if (validRaiders.length === 0) {
+      alert('Please add at least one raider encounter');
+      return;
+    }
+
+    for (const raider of validRaiders) {
+      if (!raider.embarkId || raider.embarkId.trim() === '') {
+        alert(`Embark ID is required for raider: ${raider.name}`);
+        return;
+      }
     }
 
     const reportData: any = {
       mapId: this.selectedMapIdForm,
       mapModifiers: this.mapModifiers || '',
-      timeInRaid: this.timeInRaid,
-      raidersEncounters: this.raiders
-        .filter((r) => r.name.trim() !== '')
-        .map((r) => ({
-          name: r.name,
-          embarkId: r.embarkId || '',
-          disposition: r.disposition,
-          fieldNotes: r.fieldNotes || '',
-          picturePath: r.picturePath || '',
-        })),
+      timeInRaid: totalSeconds,
+      raidersEncounters: validRaiders.map((r) => ({
+        name: r.name,
+        embarkId: r.embarkId,
+        steamProfileId: r.steamProfileId || '',
+        disposition: r.disposition,
+        fieldNotes: r.fieldNotes || '',
+        picturePath: r.picturePath || '',
+      })),
     };
     this.submit.emit(reportData);
   }

@@ -19,6 +19,7 @@ export class RaiderDetail implements OnChanges {
 
   editedName: string = '';
   editedEmbarkId: string = '';
+  editedSteamProfileId: string = '';
   editedPicturePath: string = '';
   editedNotes: RaiderNote[] = [];
 
@@ -31,7 +32,8 @@ export class RaiderDetail implements OnChanges {
   private resetForm(): void {
     if (!this.raider) return;
     this.editedName = this.raider.name;
-    this.editedEmbarkId = this.raider.embarkId || '';
+    this.editedEmbarkId = this.raider.embarkId;
+    this.editedSteamProfileId = this.raider.steamProfileId || '';
     this.editedPicturePath = this.raider.picturePath || '';
     this.editedNotes = [...this.raider.notes];
   }
@@ -44,6 +46,7 @@ export class RaiderDetail implements OnChanges {
     const updatedRaider: Partial<RaiderModel> = {
       name: this.editedName,
       embarkId: this.editedEmbarkId,
+      steamProfileId: this.editedSteamProfileId,
       picturePath: this.editedPicturePath,
       notes: this.editedNotes,
     };

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReportService } from './report.service';
 import { MapService } from '../maps/map.service';
+import { RaiderService } from '../raiders/raider.service';
 import { ReportModel } from './report.model';
 import { MapModel } from '../maps/map.model';
 import { ReportList } from './report-list/report-list';
@@ -28,7 +29,11 @@ export class Reports implements OnInit, OnDestroy {
   private reportsSubscription?: Subscription;
   private mapsSubscription?: Subscription;
 
-  constructor(private reportService: ReportService, private mapService: MapService) {}
+  constructor(
+    private reportService: ReportService,
+    private mapService: MapService,
+    private raiderService: RaiderService
+  ) {}
 
   ngOnInit(): void {
     // Load maps
@@ -100,6 +105,7 @@ export class Reports implements OnInit, OnDestroy {
       this.reportService.updateReport(this.selectedReport._id, report).subscribe({
         next: () => {
           this.reportService.getReportsByMap(this.selectedMapId);
+          this.raiderService.loadRaiders();
           this.showForm = false;
           this.isEditing = false;
           this.selectedReport = null;
@@ -110,6 +116,7 @@ export class Reports implements OnInit, OnDestroy {
       this.reportService.addReport(report).subscribe({
         next: () => {
           this.reportService.getReportsByMap(this.selectedMapId);
+          this.raiderService.loadRaiders();
           this.showForm = false;
         },
         error: (err) => console.error('Error creating report:', err),

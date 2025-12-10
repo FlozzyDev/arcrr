@@ -8,6 +8,15 @@ const raiderSchema = new mongoose.Schema({
   },
   embarkId: {
     type: String,
+    required: true,
+    unique: true,
+    sparse: true,
+  },
+  steamProfileId: {
+    type: String,
+    required: false,
+    unique: true,
+    sparse: true,
   },
   firstEncounterDate: {
     type: Date,

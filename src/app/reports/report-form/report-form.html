@@ -38,17 +38,32 @@
       </div>
 
       <div class="spacing-md">
-        <label for="timeInRaid" class="form-label text-primary">Time in Raid (minutes)</label>
-        <input
-          type="number"
-          class="form-control"
-          id="timeInRaid"
-          [(ngModel)]="timeInRaid"
-          name="timeInRaid"
-          min="0"
-          max="45"
-          required
-        />
+        <label class="form-label text-primary">Time in Raid</label>
+        <div style="display: flex; align-items: center; gap: 8px">
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="timeMinutes"
+            name="timeMinutes"
+            min="0"
+            max="99"
+            placeholder="00"
+            style="width: 80px"
+            required
+          />
+          <span class="text-primary" style="font-size: 20px; font-weight: bold">:</span>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="timeSeconds"
+            name="timeSeconds"
+            min="0"
+            max="59"
+            placeholder="00"
+            style="width: 80px"
+            required
+          />
+        </div>
       </div>
 
       <div class="spacing-md">
@@ -80,15 +95,27 @@
             </div>
 
             <div class="spacing-sm">
-              <label [for]="'embarkId' + i" class="form-label text_content"
-                >Embark ID (optional)</label
-              >
+              <label [for]="'embarkId' + i" class="form-label text_content">Embark ID *</label>
               <input
                 type="text"
                 class="form-control"
                 [id]="'embarkId' + i"
                 [(ngModel)]="raider.embarkId"
                 [name]="'embarkId' + i"
+                required
+              />
+            </div>
+
+            <div class="spacing-sm">
+              <label [for]="'steamProfileId' + i" class="form-label text_content"
+                >Steam Profile ID (optional)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                [id]="'steamProfileId' + i"
+                [(ngModel)]="raider.steamProfileId"
+                [name]="'steamProfileId' + i"
               />
             </div>
 

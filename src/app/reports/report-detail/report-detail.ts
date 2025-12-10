@@ -31,6 +31,12 @@ export class ReportDetail {
     return disposition.charAt(0).toUpperCase() + disposition.slice(1);
   }
 
+  formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
   onEdit(): void {
     this.edit.emit();
   }

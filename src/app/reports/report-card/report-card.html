@@ -6,11 +6,12 @@
   <div class="report-card-banner" [style.background-image]="'url(' + getBannerImage() + ')'"></div>
   <div class="card-body">
     <div class="flex-between spacing-sm">
-      <h6 class="card-title text-primary">
-        {{ report.datetime | date : 'short' }}
-      </h6>
-      <span class="text_content">Time in Raid: {{ report.timeInRaid }} min</span>
+      <h6 class="card-title text-primary">Report Number: {{ report.reportNumber }}</h6>
+      <span class="text_content">Time in Raid: {{ formatTime(report.timeInRaid) }}</span>
     </div>
+    <p class="card-text text_content text-small spacing-sm">
+      <strong>Date & Time:</strong> {{ report.datetime | date : 'short' }}
+    </p>
     <p class="card-text text_content text-small spacing-sm">
       <strong>Map:</strong> {{ getMapName() }}
     </p>

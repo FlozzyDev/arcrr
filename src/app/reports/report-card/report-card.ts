@@ -26,6 +26,12 @@ export class ReportCard {
     return '/assets/images/site/arcrr_background_lg.webp';
   }
 
+  formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
   getFriendlyCount(): number {
     return this.report.raidersEncounters.filter((r) => r.disposition === 'friendly').length;
   }

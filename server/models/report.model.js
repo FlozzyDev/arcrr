@@ -6,6 +6,10 @@ const reportSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    reportNumber: {
+      type: Number,
+      required: true,
+    },
     mapId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Map',
@@ -18,7 +22,7 @@ const reportSchema = new mongoose.Schema(
     timeInRaid: {
       type: Number,
       required: true,
-      max: 45,
+      max: 2700,
     },
     raidersEncounters: [
       {

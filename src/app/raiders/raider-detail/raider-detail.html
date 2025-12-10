@@ -9,9 +9,14 @@
         <p class="text_content">{{ raider.name }}</p>
       </div>
 
-      <div class="spacing-md" *ngIf="raider.embarkId">
+      <div class="spacing-md">
         <strong class="text-primary">Embark ID:</strong>
         <p class="text_content">{{ raider.embarkId }}</p>
+      </div>
+
+      <div class="spacing-md" *ngIf="raider.steamProfileId">
+        <strong class="text-primary">Steam Profile ID:</strong>
+        <p class="text_content">{{ raider.steamProfileId }}</p>
       </div>
 
       <div class="spacing-md">
@@ -94,13 +99,27 @@
         </div>
 
         <div class="spacing-md">
-          <label for="embarkId" class="form-label text-primary">Embark ID (optional)</label>
+          <label for="embarkId" class="form-label text-primary">Embark ID</label>
           <input
             type="text"
             class="form-control"
             id="embarkId"
             [(ngModel)]="editedEmbarkId"
             name="embarkId"
+            required
+          />
+        </div>
+
+        <div class="spacing-md">
+          <label for="steamProfileId" class="form-label text-primary"
+            >Steam Profile ID (optional)</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="steamProfileId"
+            [(ngModel)]="editedSteamProfileId"
+            name="steamProfileId"
           />
         </div>
 
