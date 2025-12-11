@@ -48,7 +48,7 @@ Maintain a database of known players encountered across all raids, tracking thei
 - **Right: Raider Detail** (displays more details about the specific raider when card is selected)
 
 - **Raider Details**
-  - Player name and Embark ID (you can get this at the end of game summary)
+  - Player name / Embark ID (you can get this at the end of game summary) / steamProfileId
   - First encounter date
   - Total encounters
   - Breakdown by disposition (friendly/skittish/unfriendly counts)
@@ -61,7 +61,8 @@ Maintain a database of known players encountered across all raids, tracking thei
 A raider contains:
 
 - Name (unique)
-- Embark ID (optional)
+- Embark ID (unique)
+- Steam Profile ID (unique & optional for now)
 - First encounter date
 - Total encounters count
 - Friendly encounters count
@@ -112,6 +113,7 @@ Track field reports from raids in Arc Raiders, documenting map conditions, time 
 **Report Details**
 
 - Date/time
+- Report Number (Auto gen)
 - Map name
 - Map modifier (single selected modifier and options are based on map selected)
 - Time in raid (limit varys with mod selected)
@@ -125,6 +127,7 @@ Track field reports from raids in Arc Raiders, documenting map conditions, time 
 #### Report Data Structure
 
 - Date/time (auto-generated)
+- Report Number (auto-generated)
 - Map ID reference
 - Map modifier (single string selected from the map's mapModifiers array)
 - Time in raid (max 30 minutes unless secret bunker is the mod, which it is 45)
@@ -175,7 +178,6 @@ From root, simply run "ng serve" to spin up angular
 Next Patch
 
 - Date range filtering for reports
-- Ability to add steam Profile ID
 - Ability to pull the users steam profile picture
 - User authentication (would require sign in to make a report)
 - Deployment to Vercel/Render or something similar
