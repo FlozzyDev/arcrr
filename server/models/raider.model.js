@@ -17,6 +17,14 @@ const raiderSchema = new mongoose.Schema({
     required: false,
     unique: true,
     sparse: true,
+    default: null,
+    set: (value) => {
+      if (value === '' || value === null || value === undefined) {
+        // need to treat as null for sparse to work
+        return null;
+      }
+      return value;
+    },
   },
   firstEncounterDate: {
     type: Date,

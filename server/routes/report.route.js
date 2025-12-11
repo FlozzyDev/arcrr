@@ -115,7 +115,7 @@ router.post('/', async (req, res) => {
         raider = new Raider({
           name: encounter.name,
           embarkId: encounter.embarkId,
-          steamProfileId: encounter.steamProfileId || '',
+          steamProfileId: encounter.steamProfileId || null,
           firstEncounterDate: new Date(),
           totalEncounters: 1,
           friendlyEncounters: encounter.disposition === 'friendly' ? 1 : 0,
@@ -236,7 +236,7 @@ router.put('/:id', async (req, res) => {
           raider = new Raider({
             name: encounter.name,
             embarkId: encounter.embarkId,
-            steamProfileId: encounter.steamProfileId || '',
+            steamProfileId: encounter.steamProfileId || null,
             firstEncounterDate: new Date(),
             totalEncounters: 1,
             friendlyEncounters: encounter.disposition === 'friendly' ? 1 : 0,
