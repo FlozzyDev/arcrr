@@ -44,10 +44,6 @@ const raiderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Report',
       },
-      reportNumber: {
-        type: Number,
-        default: null,
-      },
       fieldNotes: {
         type: String,
         default: '',

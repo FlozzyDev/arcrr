@@ -190,7 +190,97 @@ router.post('/', async (req, res) => {
 // ------------------------------------------------------------------------------- Manual update a report in report details page
 router.put('/:id', async (req, res) => {
   try {
-    const updatedReport = await Report.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const existingReport = await Report.findById(req.params.id);
+    if (!existingReport) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+
+    const { mapId, mapModifiers, timeInRaid, raidersEncounters } = req.body;
+
+    if (mapId) {
+      const map = await Map.findById(mapId);
+      if (!map) {
+        return res.status(404).json({ message: 'Map not found' });
+      }
+
+      if (mapModifiers && !map.mapModifiers.includes(mapModifiers)) {
+        return res.status(400).json({ message: 'Invalid map modifier for this map' });
+      }
+    }
+
+    const maxTimeSeconds = mapModifiers === 'Secret Bunker' ? 2700 : 1800;
+    if (timeInRaid && timeInRaid > maxTimeSeconds) {
+      return res.status(400).json({
+        message: `Time in raid cannot exceed ${maxTimeSeconds / 60} minutes for this modifier`,
+      });
+    }
+
+    const processedEncounters = [];
+
+    if (raidersEncounters && Array.isArray(raidersEncounters)) {
+      for (const encounter of raidersEncounters) {
+        let steamProfileId = encounter.steamProfileId;
+        let embarkId = encounter.embarkId;
+        let raider = null;
+
+        const matchConditions = [];
+        if (embarkId && embarkId.trim()) matchConditions.push({ embarkId: embarkId });
+        if (steamProfileId && steamProfileId.trim())
+          matchConditions.push({ steamProfileId: steamProfileId });
+
+        if (matchConditions.length > 0) {
+          raider = await Raider.findOne({ $or: matchConditions });
+        }
+
+        if (!raider) {
+          raider = new Raider({
+            name: encounter.name,
+            embarkId: encounter.embarkId,
+            steamProfileId: encounter.steamProfileId || '',
+            firstEncounterDate: new Date(),
+            totalEncounters: 1,
+            friendlyEncounters: encounter.disposition === 'friendly' ? 1 : 0,
+            skittishEncounters: encounter.disposition === 'skittish' ? 1 : 0,
+            hostileEncounters: encounter.disposition === 'unfriendly' ? 1 : 0,
+            picturePath: encounter.picturePath || '/assets/images/raiders/default-raider.png',
+            notes: [
+              {
+                fieldNotes: encounter.fieldNotes || '',
+                disposition: encounter.disposition,
+                encounterDate: new Date(),
+              },
+            ],
+          });
+
+          try {
+            await raider.save();
+          } catch (error) {
+            return res.status(500).json({
+              message: 'Error creating new raider',
+              error: error.message,
+            });
+          }
+        }
+
+        processedEncounters.push({
+          raiderId: raider._id,
+          disposition: encounter.disposition,
+          fieldNotes: encounter.fieldNotes || '',
+          picturePath: encounter.picturePath || '',
+        });
+      }
+    }
+
+    const updateData = {};
+    if (mapId) updateData.mapId = mapId;
+    if (mapModifiers !== undefined) updateData.mapModifiers = mapModifiers;
+    if (timeInRaid !== undefined) updateData.timeInRaid = timeInRaid;
+    if (processedEncounters.length > 0) updateData.raidersEncounters = processedEncounters;
+
+    const updatedReport = await Report.findByIdAndUpdate(req.params.id, updateData, { new: true })
+      .populate('mapId', 'name bannerImage')
+      .populate('raidersEncounters.raiderId', 'name embarkId');
+
     res.status(200).json({ message: 'Report updated successfully', report: updatedReport });
   } catch (error) {
     res.status(500).json({ message: 'Error updating report', error: error.message });

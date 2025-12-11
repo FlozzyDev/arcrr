@@ -24,7 +24,9 @@
 .hero-text {
   font-family: 'Courier New', monospace;
   font-size: 1.1rem;
+  font-weight: 800;
   line-height: 1.6;
+  text-decoration: underline;
   position: relative;
   z-index: 1;
   background-color: rgba(42, 42, 42, 0.75);
