@@ -46,11 +46,14 @@ router.get('/:id', async (req, res) => {
 // ------------------------------------------------------------------------------- Post a new report
 // ----------------------------------------------------------------------------- This is also where we create new raiders if they don't exist.
 router.post('/', async (req, res) => {
+  console.log(`Creating new report - calling POST`);
+  console.log(`req.body: ${JSON.stringify(req.body)}`);
   try {
     const { mapId, mapModifiers, timeInRaid, raidersEncounters } = req.body;
     const map = await Map.findById(mapId);
+    console.log(`Map found: ${JSON.stringify(map)}`);
     if (!map) {
-      return res.status(404).json({ message: 'Map not found' });
+      return res.status(404).json({ message: 'Map not found - error here' });
     }
 
     if (mapModifiers && !map.mapModifiers.includes(mapModifiers)) {
@@ -70,17 +73,45 @@ router.post('/', async (req, res) => {
     const processedEncounters = [];
 
     for (const encounter of raidersEncounters) {
-      let raider = await Raider.findOne({
-        name: { $regex: new RegExp(`^${encounter.name}$`, 'i') },
-      });
+      let steamProfileId = encounter.steamProfileId;
+      let embarkId = encounter.embarkId;
+      let raider = null;
 
-      if (!raider) {
-        if (!encounter.embarkId) {
-          return res.status(400).json({
-            message: `Embark ID is required for new raider: ${encounter.name}`,
-          });
+      const matchConditions = [];
+      if (embarkId && embarkId.trim()) matchConditions.push({ embarkId: embarkId });
+      if (steamProfileId && steamProfileId.trim())
+        matchConditions.push({ steamProfileId: steamProfileId });
+
+      if (matchConditions.length > 0) {
+        raider = await Raider.findOne({ $or: matchConditions });
+      }
+
+      if (raider) {
+        raider.totalEncounters += 1;
+        if (encounter.disposition === 'friendly') raider.friendlyEncounters += 1;
+        if (encounter.disposition === 'skittish') raider.skittishEncounters += 1;
+        if (encounter.disposition === 'unfriendly') raider.hostileEncounters += 1;
+
+        if (encounter.picturePath) {
+          raider.picturePath = encounter.picturePath;
         }
 
+        raider.notes.push({
+          fieldNotes: encounter.fieldNotes || '',
+          disposition: encounter.disposition,
+          encounterDate: new Date(),
+        });
+
+        try {
+          await raider.save();
+          console.log('Existing raider updated');
+        } catch (error) {
+          return res.status(500).json({
+            message: 'Error updating existing raider',
+            error: error.message,
+          });
+        }
+      } else {
         raider = new Raider({
           name: encounter.name,
           embarkId: encounter.embarkId,
@@ -102,43 +133,10 @@ router.post('/', async (req, res) => {
 
         try {
           await raider.save();
-          console.log('New raider record created successfully');
+          console.log('New raider created');
         } catch (error) {
           return res.status(500).json({
-            message: 'Error creating new raider record for report',
-            error: error.message,
-          });
-        }
-      } else {
-        raider.totalEncounters += 1;
-        if (encounter.disposition === 'friendly') raider.friendlyEncounters += 1;
-        if (encounter.disposition === 'skittish') raider.skittishEncounters += 1;
-        if (encounter.disposition === 'unfriendly') raider.hostileEncounters += 1;
-
-        if (encounter.embarkId && !raider.embarkId) {
-          raider.embarkId = encounter.embarkId;
-        }
-
-        if (encounter.steamProfileId && !raider.steamProfileId) {
-          raider.steamProfileId = encounter.steamProfileId;
-        }
-
-        if (encounter.picturePath) {
-          raider.picturePath = encounter.picturePath;
-        }
-
-        raider.notes.push({
-          fieldNotes: encounter.fieldNotes || '',
-          disposition: encounter.disposition,
-          encounterDate: new Date(),
-        });
-
-        try {
-          await raider.save();
-          console.log('Raider record updated successfully');
-        } catch (error) {
-          return res.status(500).json({
-            message: 'Error updating existing raider record for report',
+            message: 'Error creating new raider',
             error: error.message,
           });
         }

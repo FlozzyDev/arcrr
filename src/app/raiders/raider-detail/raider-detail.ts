@@ -71,4 +71,11 @@ export class RaiderDetail implements OnChanges {
     }
     return new Date(note.encounterDate).toLocaleDateString();
   }
+
+  getReportNumber(note: RaiderNote): string {
+    if (typeof note.reportId === 'object' && note.reportId !== null) {
+      return note.reportId.reportNumber ? `#${note.reportId.reportNumber}` : 'N/A';
+    }
+    return 'N/A';
+  }
 }

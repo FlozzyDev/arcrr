@@ -29,6 +29,14 @@ export class Raiders implements OnInit, OnDestroy {
       next: (raiders) => {
         this.raiders = raiders;
         this.filteredRaiders = raiders;
+        if (this.selectedRaider) {
+          this.raiderService.getRaider(this.selectedRaider._id).subscribe({
+            next: (fullRaider) => {
+              this.selectedRaider = fullRaider;
+            },
+            error: (err) => console.error('Error reloading selected raider:', err),
+          });
+        }
       },
       error: (err) => console.error('Error loading raiders:', err),
     });

@@ -57,6 +57,10 @@
         </div>
         <div *ngFor="let note of raider.notes" class="encounter-box spacing-top-md">
           <div class="spacing-sm">
+            <strong class="text-primary">Report Number: </strong>
+            <span class="text_content">{{ getReportNumber(note) }}</span>
+          </div>
+          <div class="spacing-sm">
             <strong class="text-primary">Date: </strong>
             <span class="text_content">{{ getReportDate(note) }}</span>
           </div>

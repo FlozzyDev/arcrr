@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
   try {
     const raider = await Raider.findById(req.params.id).populate(
       'notes.reportId',
-      'datetime mapId'
+      'datetime mapId reportNumber'
     );
     if (!raider) {
       return res.status(404).json({ message: 'Raider not found' });

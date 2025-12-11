@@ -1,5 +1,6 @@
 export interface RaiderNote {
-  reportId: string | { _id: string; datetime: Date; mapId: any };
+  reportId: string | { _id: string; datetime: Date; mapId: any; reportNumber: number };
+  reportNumber: number;
   fieldNotes: string;
   disposition: 'friendly' | 'skittish' | 'unfriendly';
   encounterDate: Date;

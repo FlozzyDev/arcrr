@@ -30,8 +30,8 @@
             [report]="isEditing ? selectedReport : null"
             [maps]="maps"
             [selectedMapId]="selectedMapId"
-            (submit)="onFormSubmit($event)"
-            (cancel)="onFormCancel()"
+            (submitReport)="onFormSubmit($event)"
+            (cancelReport)="onFormCancel()"
           ></app-report-form>
         </div>
         <div *ngIf="!showForm && selectedReport">

@@ -31,8 +31,8 @@ export class ReportForm implements OnInit, OnChanges {
   @Input() report: ReportModel | null = null;
   @Input() maps: MapModel[] = [];
   @Input() selectedMapId: string = 'all';
-  @Output() submit = new EventEmitter<Partial<ReportModel>>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() submitReport = new EventEmitter<Partial<ReportModel>>();
+  @Output() cancelReport = new EventEmitter<void>();
 
   selectedMapIdForm: string = '';
   mapModifiers: string = '';
@@ -148,10 +148,10 @@ export class ReportForm implements OnInit, OnChanges {
         picturePath: r.picturePath || '',
       })),
     };
-    this.submit.emit(reportData);
+    this.submitReport.emit(reportData);
   }
 
   onCancel(): void {
-    this.cancel.emit();
+    this.cancelReport.emit();
   }
 }
